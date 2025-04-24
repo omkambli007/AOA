@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int ld[30] = { 0 };
+int rd[30] = { 0 };
+int cl[30] = { 0 };
+
+void printSolution(int** board, int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++)
+            printf(" %s ", board[i][j] == 1 ? "Q" : ".");
+        printf("\n");
+    }
+}
+
+int solveNQUtil(int** board, int col, int n) {
+    if (col >= n)
+        return 1;
+
+    for (int i = 0; i < n; i++) {
+        if ((ld[i - col + n - 1] != 1 && rd[i + col] != 1) && cl[i] != 1) {
+            board[i][col] = 1;
+            ld[i - col + n - 1] = rd[i + col] = cl[i] = 1;
+
+            if (solveNQUtil(board, col + 1, n))
+                return 1;
+
+            board[i][col] = 0;
+            ld[i - col + n - 1] = rd[i + col] = cl[i] = 0;
+        }
+    }
+
+    return 0;
+}
+
+int solveNQ(int n) {
+    int** board = (int**)malloc(n * sizeof(int*));
+    for (int i = 0; i < n; i++)
+        board[i] = (int*)malloc(n * sizeof(int));
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            board[i][j] = 0;
+
+    if (solveNQUtil(board, 0, n) == 0) {
+        printf("Solution does not exist");
+        return 0;
+    }
+
+    printSolution(board, n);
+    return 1;
+}
+
+int main() {
+    int n = 4;
+    solveNQ(n);
+    return 0;
+}
+
+
+
+
+
+
+Time Complexity: O(N!)
+Auxiliary Space: O(N2)
+
+
+
+
+Start in the leftmost column
+● If all queens are placed return true
+● Try all rows in the current column. Do the following for every row.
+○ If the queen can be placed safely in this row
+○ Then mark this [row, column] as part of the
+solution and recursively check if placing
+queen here leads to a solution.
+○ If placing the queen in [row, column] leads
+to a solution then return true.
+○ If placing queen doesn’t lead to a solution
+then unmark this [row, column] then
+backtrack and try other rows.
+○ If all rows have been tried and valid solution is not found
+return false to trigger backtracking.
