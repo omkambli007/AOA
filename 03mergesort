@@ -1,0 +1,99 @@
+#include <stdio.h>
+
+void merge(int a[], int beg, int mid, int end) {
+    int i, j, k;
+    int n1 = mid - beg + 1;
+    int n2 = end - mid;
+    int LeftArray[n1], RightArray[n2];
+    for (i = 0; i < n1; i++)
+        LeftArray[i] = a[beg + i];
+    for (j = 0; j < n2; j++)
+        RightArray[j] = a[mid + 1 + j];
+    i = 0;
+    j = 0;
+    k = beg;
+    while (i < n1 && j < n2) {
+        if (LeftArray[i] <= RightArray[j]) {
+            a[k] = LeftArray[i];
+            i++;
+        } else {
+            a[k] = RightArray[j];
+            j++;
+        }
+        k++;
+    }
+    while (i < n1) {
+        a[k] = LeftArray[i];
+        i++;
+        k++;
+    }
+    while (j < n2) {
+        a[k] = RightArray[j];
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(int a[], int beg, int end) {
+    if (beg < end) {
+        int mid = (beg + end) / 2;
+        mergeSort(a, beg, mid);
+        mergeSort(a, mid + 1, end);
+        merge(a, beg, mid, end);
+    }
+}
+
+void printArray(int a[], int n) {
+    for (int i = 0; i < n; i++)
+        printf("%d ", a[i]);
+    printf("\n");
+}
+
+int main() {
+    int n;
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    int a[n];
+    printf("Enter %d elements:\n", n);
+    for (int i = 0; i < n; i++)
+        scanf("%d", &a[i]);
+
+    printf("Before sorting:\n");
+    printArray(a, n);
+
+    mergeSort(a, 0, n - 1);
+
+    printf("After sorting:\n");
+    printArray(a, n);
+
+    return 0;
+}
+
+
+
+
+
+
+Time Complexity
+Best Case O(n*logn)
+Average Case O(n*logn)
+Worst Case O(n*logn)
+
+
+
+
+
+
+
+
+
+algorithm
+MERGE_SORT(arr, beg, end)
+if beg < end
+set mid = (beg + end)/2
+MERGE_SORT(arr, beg, mid)
+MERGE_SORT(arr, mid + 1, end)
+MERGE (arr, beg, mid, end)
+end of if
+END MERGE_SORT
