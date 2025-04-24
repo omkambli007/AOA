@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <string.h>
+
+void search(char* pat, char* txt) {
+    int M = strlen(pat);
+    int N = strlen(txt);
+
+    for (int i = 0; i <= N - M; i++) {
+        int j;
+        for (j = 0; j < M; j++) {
+            if (txt[i + j] != pat[j])
+                break;
+        }
+        if (j == M)
+            printf("Pattern found at index %d\n", i);
+    }
+}
+
+int main() {
+    char txt1[] = "AABAACAADAABAABA";
+    char pat1[] = "AABA";
+    printf("Example 1:\n");
+    search(pat1, txt1);
+
+    char txt2[] = "agd";
+    char pat2[] = "g";
+    printf("\nExample 2:\n");
+    search(pat2, txt2);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+Time Complexity: O(N2)
+Auxiliary Space: O(1)
+
+
+
+
+
+The Naive String Matching Algorithm
+The naive approach tests all the possible placement of Pattern P [1.......m] relative to text T
+[1......n]. We try shift s = 0, 1.......n-m, successively and for each shift s. Compare T
+[s+1.......s+m] to P [1......m].
+The naive algorithm finds all valid shifts using a loop that checks the condition P [1.......m]
+= T [s+1.......s+m] for each of the n - m +1 possible value of s.
