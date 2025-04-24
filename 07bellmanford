@@ -1,0 +1,84 @@
+#include <limits.h>
+#include <stdio.h>
+
+#define MAX_VERTICES 1000
+#define INF INT_MAX
+
+void bellmanFord(int graph[][3], int vertices, int edges, int source) {
+    int distance[MAX_VERTICES];
+
+    for (int i = 0; i < vertices; ++i)
+        distance[i] = INF;
+    distance[source] = 0;
+
+    for (int i = 0; i < vertices - 1; ++i) {
+        for (int j = 0; j < edges; ++j) {
+            int u = graph[j][0];
+            int v = graph[j][1];
+            int w = graph[j][2];
+
+            if (distance[u] != INF && distance[v] > distance[u] + w)
+                distance[v] = distance[u] + w;
+        }
+    }
+
+    for (int i = 0; i < edges; ++i) {
+        int u = graph[i][0];
+        int v = graph[i][1];
+        int w = graph[i][2];
+
+        if (distance[u] != INF && distance[v] > distance[u] + w) {
+            printf("Negative cycle detected\n");
+            return;
+        }
+    }
+
+    printf("Vertex Distance from Source\n");
+    for (int i = 0; i < vertices; ++i)
+        printf("%d \t\t %d\n", i, distance[i]);
+}
+
+int main() {
+    int vertices = 6;
+    int edges = 8;
+
+    int graph[][3] = {
+        {0, 1, 5}, {0, 2, 7}, {1, 2, 3},
+        {1, 3, 4}, {1, 4, 6}, {3, 4, -1},
+        {3, 5, 2}, {4, 5, -3}
+    };
+
+    bellmanFord(graph, vertices, edges, 0);
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+Best Case: O(E), when distance array after 1st and 2nd relaxation are same , we
+can simply stop further processing
+● Average Case: O(V*E)
+● Worst Case: O(V*E)
+
+
+
+
+
+algorithm
+1. Initialize the distance from the source to all vertices as infinite.
+2. Set the distance to the source itself as 0.
+3. Set the predecessor of all vertices as NULL.
+4. For each vertex, apply relaxation for all its edges.
+5. Repeat the relaxation process V-1 times, where V is the number of vertices in the
+graph.
+6. Relaxation is the process of updating the shortest path found so far by checking if a
+shorter path can be obtained by going through the vertex under consideration.
+7. Check for negative-weight cycles by relaxing all edges one more time.
+8. If we can find a shorter path, then there is a negative cycle.
+9. Return the shortest distance array and the predecessor array.
